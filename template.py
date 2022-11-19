@@ -9,6 +9,7 @@ from sklearn import tree, svm
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 
 
 def load_dataset(dataset_path):
@@ -69,12 +70,13 @@ def svm_train_test(x_train, x_test, y_train, y_test):
     scaler = StandardScaler()
     clf = svm.SVC()
 
-    x_train = scaler.fit_transform(x_train)
-    x_test = scaler.transform(x_test)
+    pipe_line = make_pipeline(
+        scaler, clf
+    )
 
-    clf = clf.fit(x_train, y_train)
+    pipe_line.fit(x_train, y_train)
 
-    y_pred = clf.predict(x_test)
+    y_pred = pipe_line.predict(x_test)
 
     acc = accuracy_score(y_true=y_test, y_pred=y_pred)
     prec = precision_score(y_true=y_test, y_pred=y_pred)
